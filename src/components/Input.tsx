@@ -1,7 +1,11 @@
 import styled from 'styled-components';
 import { theme } from '../theme';
 
-export const Input = styled.input`
+type InputProps = {
+  fullWidth?: boolean;
+};
+
+export const Input = styled.input<InputProps>`
   background: ${theme.gray[300]};
   border: none;
   height: 43px;
@@ -11,6 +15,7 @@ export const Input = styled.input`
   font-size: 1em;
   font-family: Montserrat, sans-serif;
   transition: background-color 100ms ease-in-out;
+  width: ${(props) => (props.fullWidth ? '100%' : 'initial')};
 
   &:hover {
     background: ${theme.gray[400]};
@@ -18,6 +23,5 @@ export const Input = styled.input`
 
   &:focus {
     background: ${theme.gray[500]};
-    /* box-shadow: 0 0 0 1px ${theme.primary[300]}; */
   }
 `;

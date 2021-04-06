@@ -3,16 +3,39 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  createHttpLink,
+} from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 import { GlobalFonts } from './fonts/fonts';
+import { GlobalStyle } from './globalStyle';
+import { config } from './config';
+
+const httpLink = createHttpLink({
+  uri: 'https://api.github.com/graphql',
+});
+
+const authLink = setContext((_, { headers }) => {
+  return {
+    headers: {
+      ...headers,
+      Authorization: `Bearer ${config.githubToken}`,
+    },
+  };
+});
 
 const graphqlClient = new ApolloClient({
-  uri: 'https://api.github.com/graphql',
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
 
 ReactDOM.render(
   <React.StrictMode>
+    <GlobalFonts />
+    <GlobalStyle />
     <ApolloProvider client={graphqlClient}>
       <App />
     </ApolloProvider>
